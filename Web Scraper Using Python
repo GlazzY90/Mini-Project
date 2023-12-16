@@ -1,0 +1,43 @@
+import requests
+import csv
+from bs4 import BeautifulSoup
+
+# Scrape from a table
+url = 'https://www.scrapethissite.com/pages/forms/'
+response = requests.get(url)
+
+soup = BeautifulSoup(response.text, 'html.parser')
+table = soup.find('table', attrs={'class':'table'})
+
+file = open("SCRAPER_PROJECT.csv", "w")
+writer = csv.writer(file)
+
+writer.writerow(["NAME", "WINS" "/LOSSES"])
+
+for row in table.find_all('tr'):
+    name = row.find('td', attrs={'class' : 'name'})
+    wins = row.find('td', attrs = {'class' : 'wins'})
+    losses = row.find('td', attrs = {'class' : 'losses'})
+    if name is not None and wins is not None and losses is not None:
+        writer.writerow([name.text.strip() + ", " + wins.text.strip() + "/" + losses.text.strip()])
+        print(name.text.strip() + " - " + wins.text.strip() + "/" + losses.text.strip())
+
+file.close()
+
+# Scrape from a container
+req = requests.get("https://quotes.toscrape.com/")
+soup = BeautifulSoup(req.content, "html.parser")
+quotes = soup.findAll("span", attrs={"class" : "text"})
+authors = soup.findAll("small", attrs={"class" : "author"})
+for quote, author in zip(quotes, authors):
+    print(quote.text + " - " + author.text)
+
+# Scrape pictures
+def getdata(url): 
+	r = requests.get(url) 
+	return r.text 
+	
+htmldata = getdata("https://books.toscrape.com/") 
+soup = BeautifulSoup(htmldata, 'html.parser') 
+for item in soup.find_all('img'): 
+	print("https://books.toscrape.com/" + item['src'] + " - " + item ['alt'])
