@@ -1,3 +1,7 @@
+# Name: Ferdinand M. Sihombing
+# NIM : 11S22040
+# WEB SCRAPER IN PYTHON
+
 import requests
 import csv
 from bs4 import BeautifulSoup
